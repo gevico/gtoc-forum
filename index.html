@@ -1,33 +1,34 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GTOC Forum 2025</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
-  
-  <!-- 配置Tailwind自定义主题 -->
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            primary: '#1a365d',
-            secondary: '#4299e1',
-            accent: '#ed8936',
-            dark: '#1a202c',
-          },
-          fontFamily: {
-            sans: ['Inter', 'system-ui', 'sans-serif'],
-          },
-        },
-      }
-    }
-  </script>
-  
-  <style type="text/tailwindcss">
-    @layer utilities {
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GTOC Forum 2025</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+    <!-- 配置Tailwind自定义主题 -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1a365d',
+                        secondary: '#4299e1',
+                        accent: '#ed8936',
+                        dark: '#1a202c',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                },
+            }
+        }
+    </script>
+
+    <style type="text/tailwindcss">
+        @layer utilities {
       .content-auto {
         content-visibility: auto;
       }
@@ -45,129 +46,144 @@
 </head>
 
 <body class="font-sans text-gray-800 overflow-x-hidden">
-  <!-- 全屏图片区域 -->
-  <header class="relative h-screen w-full overflow-hidden">
-    <div class="absolute inset-0 z-0">
-      <img src="https://github.com/gevico/gtoc-forum/blob/main/asserts/head.png?raw=true" 
-           alt="背景图片" 
-           class="w-full h-full object-cover">
-      <div class="absolute inset-0 bg-black/40"></div>
-    </div>
-
-    <!-- 标题区域 -->
-    <div class="absolute inset-0 flex items-center justify-center z-10 text-center px-4">
-      <div class="max-w-3xl mx-auto">
-        <h1 class="text-[clamp(2.5rem,8vw,4.5rem)] font-bold text-white text-shadow-lg mb-6 leading-tight">
-          GTOC Forum 2025
-        </h1>
-        <p class="text-[clamp(1rem,3vw,1.25rem)] text-white text-shadow max-w-2xl mx-auto mb-8">
-          格维开源社区 - 线上技术分享会
-        </p>
-      </div>
-    </div>
-    
-    <!-- 向下滚动指示 -->
-    <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-10 animate-bounce">
-      <a href="#intro" class="text-white text-3xl opacity-80 hover:opacity-100 transition-opacity">
-        <i class="fa fa-chevron-down"></i>
-      </a>
-    </div>
-  </header>
-
-  <!-- 介绍区域 -->
-  <section id="intro" class="py-5 bg-gray-50">
-    <div class="container mx-auto px-4">
-      <div class="max-w-3xl mx-auto">
-        <div id="readme-content" class="text-lg text-gray-600 leading-relaxed prose max-w-none">
-          <!-- 直接嵌入README内容 -->
-          <div style="background-color: #f0f8ff; padding: 16px; border-left: 4px solid #4682b4; border-radius: 4px; margin-bottom: 24px; text-align: justify;">
-            GTOC Forum 是由社区成员牵头发起的线上技术交流会议，不定期开展。社区成员如果有感兴趣或者想要申报议题，可以通过<a href="https://github.com/gevico/gtoc-forum/issues" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline font-medium"> Github 仓库的 issues </a>页面发起申请。
-          </div>
-
-          <h3 class="text-xl font-bold mt-4 mb-3">GTOC Forum 2025</h3>
-          
-          <ul class="list-disc ml-6 mb-4">
-            <li class="mb-2">QEMU TCG IR 常见性能优化手段分析 - 李大（<a href="https://liuxocakn.org.cn/indexof/%E8%99%9A%E6%8B%9F%E5%8C%96/Qemu%20TCG%20IR%20%E4%BC%98%E5%8C%96%E6%89%8B%E6%AE%B5%E5%88%86%E6%9E%90.md" class="text-blue-600 hover:underline">slides</a>, <a href="https://www.bilibili.com/video/BV1XpnnzSEfm/" class="text-blue-600 hover:underline">video</a>）</li>
-            <li>QEMU TCG execlog plugin 实战解析 - 盛钊（<a href="https://mp.weixin.qq.com/s/SVXYPO7pGrAXdfG8YSsyhg" class="text-blue-600 hover:underline">slides</a>, <a href="https://www.bilibili.com/video/BV18141zYECV" class="text-blue-600 hover:underline">video</a>）</li>
-          </ul>
+    <!-- 全屏图片区域 -->
+    <header class="relative h-screen w-full overflow-hidden">
+        <div class="absolute inset-0 z-0">
+            <img src="https://github.com/gevico/gtoc-forum/blob/main/asserts/head.png?raw=true" alt="背景图片"
+                class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-black/40"></div>
         </div>
-      </div>
-    </div>
-  </section>
 
-  <!-- 页脚 -->
-  <footer class="bg-primary text-white py-12">
-    <div class="container mx-auto px-4">
-      <div class="text-center">
-        <p class="mb-4">© 2025 格维开源社区. 保留所有权利.</p>
-        <div class="flex justify-center space-x-6">
-          <a href="https://github.com/gevico/gtoc-forum" target="_blank" rel="noopener noreferrer" class="text-white/80 hover:text-white transition-colors">
-            <i class="fa fa-github text-xl"></i>
-          </a>
-          <a href="https://space.bilibili.com/483048140/lists/6433029?type=season" target="_blank" rel="noopener noreferrer" class="text-white/80 hover:text-white transition-colors">
-            <i class="fa fa-youtube-play text-xl"></i>
-          </a>
-          <a href="https://qm.qq.com/q/jIXYyZkQqQ" target="_blank" rel="noopener noreferrer" class="text-white/80 hover:text-white transition-colors">
-            <i class="fa fa-qq text-xl"></i>
-          </a>
-          <a href="https://t.me/gevico_channel" target="_blank" rel="noopener noreferrer" class="text-white/80 hover:text-white transition-colors">
-            <i class="fa fa-telegram text-xl"></i>
-          </a>
+        <!-- 标题区域 -->
+        <div class="absolute inset-0 flex items-center justify-center z-10 text-center px-4">
+            <div class="max-w-3xl mx-auto">
+                <h1 class="text-[clamp(2.5rem,8vw,4.5rem)] font-bold text-white text-shadow-lg mb-6 leading-tight">
+                    GTOC Forum 2025
+                </h1>
+                <p class="text-[clamp(1rem,3vw,1.25rem)] text-white text-shadow max-w-2xl mx-auto mb-8">
+                    格维开源社区 - 线上技术分享会
+                </p>
+            </div>
         </div>
-      </div>
-    </div>
-  </footer>
 
-  <!-- JavaScript -->
-  <script>
-    // 导航栏滚动效果
-    const navbar = document.getElementById('navbar');
-    window.addEventListener('scroll', () => {
-      if (window.scrollY > 50) {
-        navbar.classList.add('bg-dark/90', 'bg-blur', 'shadow-lg');
-        navbar.classList.remove('py-4');
-        navbar.classList.add('py-2');
-      } else {
-        navbar.classList.remove('bg-dark/90', 'bg-blur', 'shadow-lg');
-        navbar.classList.remove('py-2');
-        navbar.classList.add('py-4');
-      }
-    });
-    
-    // 移动端菜单切换
-    const menuToggle = document.getElementById('menuToggle');
-    const mobileMenu = document.getElementById('mobileMenu');
-    
-    menuToggle.addEventListener('click', () => {
-      mobileMenu.classList.toggle('hidden');
-      const icon = menuToggle.querySelector('i');
-      if (icon.classList.contains('fa-bars')) {
-        icon.classList.remove('fa-bars');
-        icon.classList.add('fa-times');
-      } else {
-        icon.classList.remove('fa-times');
-        icon.classList.add('fa-bars');
-      }
-    });
-    
-    // 平滑滚动
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        
-        // 关闭移动菜单（如果打开）
-        if (!mobileMenu.classList.contains('hidden')) {
-          mobileMenu.classList.add('hidden');
-          const icon = menuToggle.querySelector('i');
-          icon.classList.remove('fa-times');
-          icon.classList.add('fa-bars');
-        }
-        
-        document.querySelector(this.getAttribute('href')).scrollIntoView({
-          behavior: 'smooth'
+        <!-- 向下滚动指示 -->
+        <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-10 animate-bounce">
+            <a href="#intro" class="text-white text-3xl opacity-80 hover:opacity-100 transition-opacity">
+                <i class="fa fa-chevron-down"></i>
+            </a>
+        </div>
+    </header>
+
+    <!-- 介绍区域 -->
+    <section id="intro" class="py-5 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="max-w-3xl mx-auto">
+                <div id="readme-content" class="text-lg text-gray-600 leading-relaxed prose max-w-none">
+                    <!-- 直接嵌入README内容 -->
+                    <div
+                        style="background-color: #f0f8ff; padding: 16px; border-left: 4px solid #4682b4; border-radius: 4px; margin-bottom: 24px; text-align: justify;">
+                        GTOC Forum 是由社区成员牵头发起的线上技术交流会议，不定期开展。社区成员如果有感兴趣或者想要申报议题，可以通过<a
+                            href="https://github.com/gevico/gtoc-forum/issues" target="_blank" rel="noopener noreferrer"
+                            class="text-blue-600 hover:underline font-medium"> Github 仓库的 issues </a>页面发起申请。
+                    </div>
+
+                    <h3 class="text-xl font-bold mt-4 mb-3">GTOC Forum 2025</h3>
+
+                    <ul class="list-disc ml-6 mb-4">
+                        <li class="mb-2">QEMU TCG IR 常见性能优化手段分析 - 李大（<a
+                                href="https://liuxocakn.org.cn/indexof/%E8%99%9A%E6%8B%9F%E5%8C%96/Qemu%20TCG%20IR%20%E4%BC%98%E5%8C%96%E6%89%8B%E6%AE%B5%E5%88%86%E6%9E%90.md"
+                                class="text-blue-600 hover:underline">slides</a>, <a
+                                href="https://www.bilibili.com/video/BV1XpnnzSEfm/"
+                                class="text-blue-600 hover:underline">video</a>）</li>
+                        <li>QEMU TCG execlog plugin 实战解析 - 盛钊（<a
+                                href="https://mp.weixin.qq.com/s/SVXYPO7pGrAXdfG8YSsyhg"
+                                class="text-blue-600 hover:underline">slides</a>, <a
+                                href="https://www.bilibili.com/video/BV18141zYECV"
+                                class="text-blue-600 hover:underline">video</a>）</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="bg-primary text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="text-center">
+                <p class="mb-4">© 2025 格维开源社区. 保留所有权利.</p>
+                <div class="flex justify-center space-x-6">
+                    <a href="https://github.com/gevico/gtoc-forum" target="_blank" rel="noopener noreferrer"
+                        class="text-white/80 hover:text-white transition-colors">
+                        <i class="fa fa-github text-xl"></i>
+                    </a>
+                    <a href="https://space.bilibili.com/483048140/lists/6433029?type=season" target="_blank"
+                        rel="noopener noreferrer" class="text-white/80 hover:text-white transition-colors">
+                        <i class="fa fa-youtube-play text-xl"></i>
+                    </a>
+                    <a href="https://qm.qq.com/q/jIXYyZkQqQ" target="_blank" rel="noopener noreferrer"
+                        class="text-white/80 hover:text-white transition-colors">
+                        <i class="fa fa-qq text-xl"></i>
+                    </a>
+                    <a href="https://t.me/gevico_channel" target="_blank" rel="noopener noreferrer"
+                        class="text-white/80 hover:text-white transition-colors">
+                        <i class="fa fa-telegram text-xl"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // 导航栏滚动效果
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('bg-dark/90', 'bg-blur', 'shadow-lg');
+                navbar.classList.remove('py-4');
+                navbar.classList.add('py-2');
+            } else {
+                navbar.classList.remove('bg-dark/90', 'bg-blur', 'shadow-lg');
+                navbar.classList.remove('py-2');
+                navbar.classList.add('py-4');
+            }
         });
-      });
-    });
-  </script>
+
+        // 移动端菜单切换
+        const menuToggle = document.getElementById('menuToggle');
+        const mobileMenu = document.getElementById('mobileMenu');
+
+        menuToggle.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+            const icon = menuToggle.querySelector('i');
+            if (icon.classList.contains('fa-bars')) {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-times');
+            } else {
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            }
+        });
+
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+
+                // 关闭移动菜单（如果打开）
+                if (!mobileMenu.classList.contains('hidden')) {
+                    mobileMenu.classList.add('hidden');
+                    const icon = menuToggle.querySelector('i');
+                    icon.classList.remove('fa-times');
+                    icon.classList.add('fa-bars');
+                }
+
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
 </body>
+
 </html>
