@@ -5,6 +5,7 @@ GTOC Forum 是由社区成员牵头发起的线上技术交流会议，不定期
 
 ## GTOC Forum 2025
 
+- Rust for QEMU 建模 I2C 总线及外设部件最佳实践 - Chen Miao（slides, [video][5]）
 - QEMU TCG IR 常见性能优化手段分析 - 李大（[slides][1], [video][2]）
 - QEMU TCG execlog plugin 实战解析 - 盛钊（[slides][3], [video][4]）
 
@@ -13,3 +14,4 @@ GTOC Forum 是由社区成员牵头发起的线上技术交流会议，不定期
 [2]: https://www.bilibili.com/video/BV1XpnnzSEfm/
 [3]: https://mp.weixin.qq.com/s/SVXYPO7pGrAXdfG8YSsyhg
 [4]: https://www.bilibili.com/video/BV18141zYECV
+[5]: https://www.bilibili.com/video/BV1UjyQBBE28
