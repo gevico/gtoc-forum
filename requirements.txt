@@ -1,0 +1,2 @@
+# requirements.txt
+markdown>=3.5.0  # 最低版本 3.5.0，兼容所有 Markdown 语法和扩展

@@ -1,0 +1,56 @@
+# .github/workflows/deploy.yml
+name: 自动生成 HTML 并部署到 GitHub Pages
+
+# 触发条件：当代码推送到 main 分支时（可修改为你的主分支名，如 master）
+on:
+  push:
+    branches: [ main ]
+  # 可选：允许手动触发工作流
+  workflow_dispatch:
+
+# 权限配置：必须授予 Pages 写入权限和 ID Token 权限（GitHub Pages 部署要求）
+permissions:
+  pages: write
+  id-token: write
+
+# 工作流任务
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest  # 运行环境：Ubuntu 最新版
+    environment:  # 部署环境配置（必填，名称固定为 github-pages）
+      name: github-pages
+    steps:
+      # 1. 检出仓库代码（获取 docs、requirements.txt、Python 脚本）
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      # 2. 设置 Python 环境（基于 requirements.txt 缓存依赖）
+      - name: 设置 Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'  # 建议 3.8+，与本地环境一致
+          cache: 'pip'            # 基于 requirements.txt 缓存依赖，加速构建
+          cache-dependency-path: 'requirements.txt'  # 明确指定依赖文件路径
+
+      # 3. 从 requirements.txt 安装依赖（规范依赖管理）
+      - name: 安装依赖
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt  # 从文件安装依赖
+
+      # 4. 运行 Python 脚本（核心修改：generate_html.py → generate.py）
+      - name: 生成 HTML 文件
+        run: python generate.py  # 改为重命名后的脚本文件名
+
+      # 5. 上传生成的 HTML 为 Pages 部署包（仅保留必要文件）
+      - name: 上传 Pages 部署包
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'  # 上传根目录的 index.html（核心文件）
+          retention-days: 1  # 部署包保留 1 天（可选，节省存储空间）
+
+      # 6. 部署部署包到 GitHub Pages
+      - name: 部署到 GitHub Pages
+        uses: actions/deploy-pages@v4
+        with:
+          artifact_name: github-pages  # 与上一步部署包名称一致
