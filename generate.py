@@ -176,7 +176,7 @@ def generate_html(year_data: Dict[str, Dict]) -> str:
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GTOC Forum 2025</title>
+    <title>GTOC Forum</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <!-- 配置Tailwind自定义主题 -->
