@@ -176,6 +176,7 @@ def generate_html(year_data: Dict[str, Dict]) -> str:
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="msvalidate.01" content="B936D7B6A9AB03565B05356475E91930" />
     <title>GTOC Forum</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
