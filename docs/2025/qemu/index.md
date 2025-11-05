@@ -1,4 +1,5 @@
 # QEMU/KVM
+- 分享使用 qemu-user/Docker 做开发板的系统/固件移植开发 - 谭小凡（[slides][6], video）
 - Rust for QEMU 建模 I2C 总线及外设部件最佳实践 - Chen Miao（slides, [video][5]）
 - QEMU TCG IR 常见性能优化手段分析 - 李大（[slides][1], [video][2]）
 - QEMU TCG execlog plugin 实战解析 - 盛钊（[slides][3], [video][4]）
@@ -9,3 +10,4 @@
 [3]: https://mp.weixin.qq.com/s/SVXYPO7pGrAXdfG8YSsyhg
 [4]: https://www.bilibili.com/video/BV18141zYECV
 [5]: https://www.bilibili.com/video/BV1UjyQBBE28
+[6]: docs/2025/qemu/qemu-docker.pdf
