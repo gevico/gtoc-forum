@@ -1,4 +1,4 @@
-# 模拟器/虚拟化
+# QEMU/KVM
 - Rust for QEMU 建模 I2C 总线及外设部件最佳实践 - Chen Miao（slides, [video][5]）
 - QEMU TCG IR 常见性能优化手段分析 - 李大（[slides][1], [video][2]）
 - QEMU TCG execlog plugin 实战解析 - 盛钊（[slides][3], [video][4]）
