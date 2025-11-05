@@ -411,7 +411,7 @@ def generate_html(year_data: Dict[str, Dict]) -> str:
                     <a href="https://qm.qq.com/q/jIXYyZkQqQ" target="_blank" rel="noopener noreferrer"
                         class="flex items-center text-white/90 hover:text-white transition-colors text-base p-1">
                         <i class="fa fa-qq mr-2 text-xl"></i>
-                        <span>QQ群</span>
+                        <span>QQ Group</span>
                     </a>
                     <a href="https://t.me/gevico_channel" target="_blank" rel="noopener noreferrer"
                         class="flex items-center text-white/90 hover:text-white transition-colors text-base p-1">
