@@ -120,8 +120,10 @@ def generate_html(year_data: Dict[str, Dict]) -> str:
         year_info = year_data[year_folder]
         year_name = os.path.basename(year_folder)
         active_class = "tab-active" if year_folder == year_folders[0] else ""
+        # 为2025年标签添加特殊类名
+        year_specific_class = "year-default" if year_name == "2025" else ""
         tab_buttons.append(f'''
-            <button class="tab-btn {active_class} py-4 px-8 text-gray-700 hover:text-primary transition-all font-bold text-2xl" data-year="{year_name}">
+            <button class="tab-btn {active_class} {year_specific_class} py-4 px-8 text-gray-700 hover:text-primary transition-all font-bold text-2xl" data-year="{year_name}">
                 {year_info["tab_name"]}
             </button>
         ''')
@@ -211,19 +213,28 @@ def generate_html(year_data: Dict[str, Dict]) -> str:
             }}
             .tab-active {{
                 color: theme('colors.primary');
-                border-bottom: 3px solid theme('colors.primary'); /* 加粗边框适配大文字 */
+                /* 激活状态下划线样式 */
+                text-decoration: underline;
+                text-underline-offset: 6px;
+                text-decoration-thickness: 3px;
+                text-decoration-color: theme('colors.primary');
                 font-weight: 700;
             }}
             /* 标签页按钮样式：默认无下划线，hover 显示下划线 */
             .tab-btn {{
-                border-bottom: 3px solid transparent; /* 适配大文字的边框厚度 */
                 white-space: nowrap; /* 防止文字换行 */
+                transition: all 0.3s ease;
             }}
-            .tab-btn:hover {{
-                border-bottom: 3px solid theme('colors.primary/60');
+            .tab-btn:hover:not(.tab-active) {{
+                text-decoration: underline;
+                text-underline-offset: 6px;
+                text-decoration-thickness: 2px;
+                text-decoration-color: theme('colors.primary/60');
             }}
-            .tab-btn.tab-active:hover {{
-                border-bottom: 3px solid theme('colors.primary');
+            /* 2025年标签页特定样式，确保居中显示 */
+            .year-default {{
+                display: inline-block;
+                position: relative;
             }}
             .card-hover {{
                 transition: all 0.3s ease;
@@ -345,16 +356,18 @@ def generate_html(year_data: Dict[str, Dict]) -> str:
             </div>
         </div>
         <!-- 向下滚动指示 -->
-        <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-10 animate-bounce">
-            <a href="#forum-archive" class="text-white text-3xl opacity-80 hover:opacity-100 transition-opacity">
-                <i class="fa fa-chevron-down"></i>
-            </a>
+        <div class="absolute bottom-8 left-0 right-0 z-10 animate-bounce px-4">
+            <div class="max-w-4xl mx-auto">
+                <a href="#forum-archive" class="text-white text-3xl opacity-80 hover:opacity-100 transition-opacity flex justify-center">
+                    <i class="fa fa-chevron-down"></i>
+                </a>
+            </div>
         </div>
     </header>
     <!-- 缩小标签页和head的距离（py-4） -->
     <section id="forum-archive" class="py-4 bg-gray-50">
         <div class="container mx-auto px-4">
-            <!-- 标签页导航（文字放大2倍，加粗+hover下划线） -->
+            <!-- 标签页导航容器 -->
             <div class="max-w-4xl mx-auto mb-6">
                 <div class="flex flex-wrap border-b border-gray-200 justify-center">
                     {tab_buttons_html}
