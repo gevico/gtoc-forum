@@ -352,7 +352,7 @@ def generate_html(year_data: Dict[str, Dict]) -> str:
                     GTOC Forum 2025
                 </h1>
                 <p class="text-[clamp(1rem,3vw,1.25rem)] text-white text-shadow max-w-2xl mx-auto mb-8">
-                    格维开源社区 - 线上技术分享会
+                    格维开源社区 - 线上技术交流论坛
                 </p>
             </div>
         </div>
@@ -383,7 +383,7 @@ def generate_html(year_data: Dict[str, Dict]) -> str:
             <!-- 说明文字（弱化样式，移到最后） -->
             <div class="max-w-4xl mx-auto mb-12">
                 <div class="bg-gray-100 p-5 rounded-lg border border-gray-200 text-justify text-gray-600 text-base leading-relaxed">
-                    GTOC Forum 是由社区成员牵头发起的线上技术交流会议，不定期开展。社区成员如果有感兴趣或者想要申报议题，可以通过<a
+                    GTOC Forum 是由社区成员牵头发起的线上技术交流论坛，不定期开展技术分享会。社区成员如果有感兴趣或者想要申报议题，可以通过<a
                         href="https://github.com/gevico/gtoc-forum/issues" target="_blank" rel="noopener noreferrer"
                         class="text-gray-700 hover:text-primary hover:underline font-medium"> Github 仓库的 issues </a>页面发起讨论和申请。
                 </div>
