@@ -70,6 +70,24 @@ def parse_year_index(year_folder: str) -> Tuple[str, List[str]]:
         print(f"警告：解析 {year_name}/index.md 失败 - {str(e)}，使用默认标签页名称（{default_tab_name}）和排序")
         return default_tab_name, default_order
 
+def count_topics_in_md(md_path: str) -> int:
+    """统计 Markdown 文件中以 '-' 开头的列表项数量（议题数量）"""
+    try:
+        with open(md_path, "r", encoding="utf-8") as f:
+            lines = f.readlines()
+        
+        count = 0
+        for line in lines:
+            line_stripped = line.strip()
+            # 统计以 '- ' 开头的列表项（注意有空格）
+            if line_stripped.startswith('- '):
+                count += 1
+        
+        return count
+    except Exception as e:
+        print(f"警告：统计 {md_path} 议题数量失败 - {str(e)}")
+        return 0
+
 def parse_md_file(md_path: str) -> Tuple[str, str]:
     """解析 MD 文件：提取一级标题和 HTML 内容（兼容所有环境）"""
     with open(md_path, "r", encoding="utf-8") as f:
@@ -98,7 +116,7 @@ def parse_md_file(md_path: str) -> Tuple[str, str]:
     )
     return title, content_html
 
-def generate_html(year_data: Dict[str, Dict]) -> str:
+def generate_html(year_data: Dict[str, Dict], total_topics: int = 0) -> str:
     """
     生成完整的 HTML 内容：
     year_data 结构：{
@@ -108,11 +126,15 @@ def generate_html(year_data: Dict[str, Dict]) -> str:
             "cards": [(卡片标题, 卡片内容), ...]
         }
     }
+    total_topics: 所有议题的总数量
     """
     # 提取所有年份（按降序排序后的顺序）
     year_folders = sorted(year_data.keys(), reverse=True, key=lambda x: os.path.basename(x))
     if not year_folders:
         raise ValueError("未找到任何有效年份文件夹，请检查 INPUT_DIR 配置")
+    
+    # 计算主题领域数量（根据实际卡片数量）
+    topic_areas = sum(len(year_data[yf]["cards"]) for yf in year_folders)
     
     # 优化标签页按钮设计
     tab_buttons = []
@@ -166,18 +188,6 @@ def generate_html(year_data: Dict[str, Dict]) -> str:
                     <!-- 卡片内容 -->
                     <div class="card-content text-gray-700 text-base md:text-lg leading-relaxed">
                         {card_content}
-                    </div>
-                    
-                    <!-- 卡片底部装饰 -->
-                    <div class="mt-6 pt-4 border-t border-gray-100 flex items-center justify-between text-sm text-gray-500">
-                        <span class="flex items-center gap-2">
-                            <i class="fa fa-calendar-o"></i>
-                            <span>{year_name}</span>
-                        </span>
-                        <span class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                            <span>查看详情</span>
-                            <i class="fa fa-arrow-right"></i>
-                        </span>
                     </div>
                 </div>
             ''')
@@ -560,17 +570,12 @@ def generate_html(year_data: Dict[str, Dict]) -> str:
             </div>
         </div>
         
-        <!-- 向下滚动指示 - 增强动画 -->
-        <div class="absolute bottom-12 left-0 right-0 z-10 px-4">
-            <div class="max-w-4xl mx-auto">
-                <a href="#forum-archive" 
-                   class="inline-block text-white text-4xl opacity-70 hover:opacity-100 transition-all animate-bounce hover:scale-110">
-                    <div class="flex flex-col items-center gap-2">
-                        <i class="fa fa-angle-double-down"></i>
-                        <span class="text-sm font-medium tracking-wider">探索更多</span>
-                    </div>
-                </a>
-            </div>
+        <!-- 向下滚动指示 - 居中布局 -->
+        <div class="absolute bottom-12 left-0 right-0 z-10 flex justify-center">
+            <a href="#forum-archive" 
+               class="text-white text-5xl opacity-70 hover:opacity-100 transition-all animate-bounce hover:scale-110">
+                <i class="fa fa-angle-double-down"></i>
+            </a>
         </div>
     </header>
     <!-- 内容区域 - 优化布局和视觉效果 -->
@@ -579,7 +584,7 @@ def generate_html(year_data: Dict[str, Dict]) -> str:
             <!-- 区域标题 -->
             <div class="max-w-5xl mx-auto mb-12 text-center animate-slide-up">
                 <h2 class="text-4xl md:text-5xl font-bold text-primary mb-4">
-                    <i class="fa fa-calendar-o mr-3 text-secondary"></i>论坛归档
+                    <i class="fa fa-calendar-o mr-3 text-secondary"></i>往期分享
                 </h2>
                 <p class="text-lg text-gray-600 max-w-2xl mx-auto">
                     探索往期技术分享，涵盖虚拟化、内核、编译器等前沿主题
@@ -635,11 +640,11 @@ def generate_html(year_data: Dict[str, Dict]) -> str:
                         <!-- 统计信息 -->
                         <div class="grid grid-cols-3 gap-4 mt-6 pt-6 border-t border-gray-200">
                             <div class="text-center">
-                                <div class="text-2xl font-bold text-secondary mb-1">10+</div>
+                                <div class="text-2xl font-bold text-secondary mb-1">{total_topics}</div>
                                 <div class="text-sm text-gray-600">技术分享</div>
                             </div>
                             <div class="text-center">
-                                <div class="text-2xl font-bold text-secondary mb-1">3</div>
+                                <div class="text-2xl font-bold text-secondary mb-1">{topic_areas}</div>
                                 <div class="text-sm text-gray-600">主题领域</div>
                             </div>
                             <div class="text-center">
@@ -834,6 +839,8 @@ def main():
     
     # 3. 解析每个年份的 index.md 和子文件夹
     year_data = {}  # 存储每个年份的所有信息
+    total_topics = 0  # 统计所有议题总数
+    
     for year_folder in year_folders:
         year_name = os.path.basename(year_folder)
         year_data[year_folder] = {
@@ -879,16 +886,22 @@ def main():
             try:
                 card_title, card_content = parse_md_file(index_md_path)
                 year_data[year_folder]["cards"].append((card_title, card_content))
-                print(f"成功解析：{year_name}/{sf_name}/index.md → 卡片标题：{card_title}")
+                
+                # 统计该文件中的议题数量
+                topic_count = count_topics_in_md(index_md_path)
+                total_topics += topic_count
+                
+                print(f"成功解析：{year_name}/{sf_name}/index.md → 卡片标题：{card_title}，议题数：{topic_count}")
             except Exception as e:
                 print(f"警告：解析 {year_name}/{sf_name}/index.md 失败 - {str(e)}，跳过")
     
     # 4. 生成 HTML 并保存
     try:
-        html_content = generate_html(year_data)
+        html_content = generate_html(year_data, total_topics)
         with open(OUTPUT_HTML, "w", encoding="utf-8") as f:
             f.write(html_content)
         print(f"\n成功生成 HTML 文件：{os.path.abspath(OUTPUT_HTML)}")
+        print(f"统计信息：共 {total_topics} 个技术议题")
     except Exception as e:
         print(f"错误：生成 HTML 失败 - {str(e)}")
 
