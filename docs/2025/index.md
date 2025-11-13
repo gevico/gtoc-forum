@@ -1,4 +1,5 @@
 #2025
-- [qemu](qemu)
+- [AI Infra](ai-infra)
 - [kernel](kernel)
 - [compiler](compiler)
+- [qemu](qemu)

@@ -558,6 +558,9 @@ def generate_html(year_data: Dict[str, Dict], total_topics: int = 0) -> str:
                 <!-- 特色标签 -->
                 <div class="flex flex-wrap justify-center gap-3 mb-8">
                     <span class="px-4 py-2 bg-white/10 backdrop-blur-md rounded-full text-white text-sm font-medium border border-white/20 hover:bg-white/20 transition-all">
+                        <i class="fa-solid fa-server mr-2"></i>AI Infra
+                    </span>
+                    <span class="px-4 py-2 bg-white/10 backdrop-blur-md rounded-full text-white text-sm font-medium border border-white/20 hover:bg-white/20 transition-all">
                         <i class="fa fa-code mr-2"></i>QEMU/KVM
                     </span>
                     <span class="px-4 py-2 bg-white/10 backdrop-blur-md rounded-full text-white text-sm font-medium border border-white/20 hover:bg-white/20 transition-all">
@@ -587,7 +590,7 @@ def generate_html(year_data: Dict[str, Dict], total_topics: int = 0) -> str:
                     <i class="fa fa-calendar-o mr-3 text-secondary"></i>往期分享
                 </h2>
                 <p class="text-lg text-gray-600 max-w-2xl mx-auto">
-                    探索往期技术分享，涵盖虚拟化、内核、编译器等前沿主题
+                    探索往期技术分享，涵盖人工智能、内核、编译器、虚拟化等前沿主题
                 </p>
                 <div class="mt-6 flex justify-center">
                     <div class="h-1 w-24 bg-gradient-to-r from-secondary to-accent rounded-full"></div>
@@ -648,7 +651,7 @@ def generate_html(year_data: Dict[str, Dict], total_topics: int = 0) -> str:
                                 <div class="text-sm text-gray-600">主题领域</div>
                             </div>
                             <div class="text-center">
-                                <div class="text-2xl font-bold text-secondary mb-1">100+</div>
+                                <div class="text-2xl font-bold text-secondary mb-1">3600+</div>
                                 <div class="text-sm text-gray-600">社区成员</div>
                             </div>
                         </div>
