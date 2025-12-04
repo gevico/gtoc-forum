@@ -1,5 +1,6 @@
 # QEMU/KVM
 
+- 从适配到启动：RISC-V G233 虚拟主板运行 Linux 全流程解析 - 人造人（[slides][g233-datasheet], [video][qemu-g233-video]）
 - 分享使用 qemu-user/Docker 做开发板的系统/固件移植开发 - 谭小凡（[slides][6], [video][7]）
 - Rust for QEMU 建模 I2C 总线及外设部件最佳实践 - Chen Miao（[slides][rust-for-qemu-slides], [video][5]）
 - QEMU TCG execlog plugin 实战解析 - 盛钊（[slides][3], [video][4]）
@@ -14,3 +15,5 @@
 [rust-for-qemu-slides]: https://lore.kernel.org/qemu-rust/cover.1761644606.git.chenmiao@openatom.club/
 [6]: docs/2025/qemu/qemu-docker.pdf
 [7]: https://www.bilibili.com/video/BV1yQ14BaET7
+[qemu-g233-video]: https://www.bilibili.com/video/BV1RR2sByEN2/
+[g233-datasheet]: https://gevico.github.io/learning-qemu-docs/ch4/g233-board-datasheet/
