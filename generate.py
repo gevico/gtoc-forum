@@ -30,21 +30,21 @@ def parse_year_index(year_folder: str) -> Tuple[str, List[str]]:
     """
     index_md_path = os.path.join(year_folder, "index.md")
     year_name = os.path.basename(year_folder)
-    default_tab_name = year_name  
+    default_tab_name = year_name
     default_order = []  # 默认顺序（空，后续按子文件夹名称排序）
-    
+
     # 如果没有 index.md，返回默认值
     if not os.path.exists(index_md_path):
         print(f"提示：年份文件夹 {year_name} 下未找到 index.md，使用默认标签页名称（{default_tab_name}）和排序")
         return default_tab_name, default_order
-    
+
     try:
         with open(index_md_path, "r", encoding="utf-8") as f:
             lines = f.readlines()
-        
+
         tab_name = default_tab_name  # 标签页名称（默认值）
         subfolder_order = []  # 子文件夹顺序
-        
+
         # 解析一级标题（第一个 # 开头的行）
         title_found = False
         for line in lines:
@@ -53,19 +53,19 @@ def parse_year_index(year_folder: str) -> Tuple[str, List[str]]:
                 tab_name = line_stripped.lstrip("# ").strip()
                 title_found = True
                 continue  # 标题行处理完，后续找列表项
-            
+
             # 解析列表项（- [xxx](子文件夹名)）
             match = ORDER_LIST_PATTERN.match(line_stripped)
             if match:
                 subfolder_name = match.group(2).strip()  # 提取子文件夹名称（链接目标）
                 if subfolder_name:
                     subfolder_order.append(subfolder_name)
-        
+
         # 去重（保留第一次出现的顺序）
         subfolder_order = list(dict.fromkeys(subfolder_order))
         print(f"成功解析 {year_name}/index.md：标签页名称='{tab_name}'，卡片顺序={subfolder_order}")
         return tab_name, subfolder_order
-    
+
     except Exception as e:
         print(f"警告：解析 {year_name}/index.md 失败 - {str(e)}，使用默认标签页名称（{default_tab_name}）和排序")
         return default_tab_name, default_order
@@ -75,14 +75,14 @@ def count_topics_in_md(md_path: str) -> int:
     try:
         with open(md_path, "r", encoding="utf-8") as f:
             lines = f.readlines()
-        
+
         count = 0
         for line in lines:
             line_stripped = line.strip()
             # 统计以 '- ' 开头的列表项（注意有空格）
             if line_stripped.startswith('- '):
                 count += 1
-        
+
         return count
     except Exception as e:
         print(f"警告：统计 {md_path} 议题数量失败 - {str(e)}")
@@ -92,7 +92,7 @@ def parse_md_file(md_path: str) -> Tuple[str, str]:
     """解析 MD 文件：提取一级标题和 HTML 内容（兼容所有环境）"""
     with open(md_path, "r", encoding="utf-8") as f:
         lines = f.readlines()
-    
+
     # 提取一级标题（第一个 # 开头的行）
     title = "未命名卡片"
     content_lines = []
@@ -104,7 +104,7 @@ def parse_md_file(md_path: str) -> Tuple[str, str]:
             title_found = True
             continue  # 跳过标题行，不加入内容
         content_lines.append(line)
-    
+
     # 仅保留 2 个最核心的非原生扩展（兼容所有 markdown 版本）
     md_extensions = [
         "fenced_code",
@@ -132,24 +132,24 @@ def generate_html(year_data: Dict[str, Dict], total_topics: int = 0) -> str:
     year_folders = sorted(year_data.keys(), reverse=True, key=lambda x: os.path.basename(x))
     if not year_folders:
         raise ValueError("未找到任何有效年份文件夹，请检查 INPUT_DIR 配置")
-    
+
     # 计算主题领域数量（根据实际卡片数量）
     topic_areas = sum(len(year_data[yf]["cards"]) for yf in year_folders)
-    
+
     # 优化标签页按钮设计
     tab_buttons = []
     for year_folder in year_folders:
         year_info = year_data[year_folder]
         year_name = os.path.basename(year_folder)
         active_class = "tab-active" if year_folder == year_folders[0] else ""
-        year_specific_class = "year-default" if year_name == "2025" else ""
+        year_specific_class = "year-default" if year_name == "2026" else ""
         tab_buttons.append(f'''
             <button class="tab-btn {active_class} {year_specific_class} rounded-xl text-lg md:text-xl hover:bg-blue-50" data-year="{year_name}">
                 <span class="relative z-10">{year_info["tab_name"]}</span>
             </button>
         ''')
     tab_buttons_html = "\n".join(tab_buttons)
-    
+
     # 生成标签页内容（按解析后的顺序排列卡片）
     tab_contents = []
     for year_folder in year_folders:
@@ -157,7 +157,7 @@ def generate_html(year_data: Dict[str, Dict], total_topics: int = 0) -> str:
         year_name = os.path.basename(year_folder)
         cards = year_info["cards"]
         active_class = "" if year_folder == year_folders[0] else "hidden"
-        
+
         # 生成卡片 HTML（按顺序排列，增强视觉效果）
         card_htmls = []
         for idx, (card_title, card_content) in enumerate(cards):
@@ -169,7 +169,7 @@ def generate_html(year_data: Dict[str, Dict], total_topics: int = 0) -> str:
             }
             icon_class = icon_map.get(card_title.split('/')[0].strip(), 'fa-file-text-o')
             anim_delay = idx * 0.1
-            
+
             card_htmls.append(f'''
                 <div class="bg-white rounded-2xl shadow-md border border-gray-100 p-8 card-hover group" style="animation-delay: {anim_delay}s;">
                     <!-- 卡片头部 -->
@@ -184,14 +184,14 @@ def generate_html(year_data: Dict[str, Dict], total_topics: int = 0) -> str:
                             <div class="mt-2 h-1 w-16 bg-gradient-to-r from-secondary to-accent rounded-full group-hover:w-24 transition-all duration-300"></div>
                         </div>
                     </div>
-                    
+
                     <!-- 卡片内容 -->
                     <div class="card-content text-gray-700 text-base md:text-lg leading-relaxed">
                         {card_content}
                     </div>
                 </div>
             ''')
-        
+
         # 处理无卡片的情况（添加精美的空状态提示）
         if not card_htmls:
             card_htmls.append(f'''
@@ -202,8 +202,8 @@ def generate_html(year_data: Dict[str, Dict], total_topics: int = 0) -> str:
                         </div>
                         <h3 class="text-2xl font-bold text-gray-700 mb-3">{year_name}年内容暂未更新</h3>
                         <p class="text-gray-500 mb-6">敬请期待更多精彩的技术分享</p>
-                        <a href="https://github.com/gevico/gtoc-forum/issues" 
-                           target="_blank" 
+                        <a href="https://github.com/gevico/gtoc-forum/issues"
+                           target="_blank"
                            rel="noopener noreferrer"
                            class="inline-flex items-center gap-2 px-6 py-3 bg-secondary text-white rounded-lg hover:bg-secondary/90 transition-all font-medium">
                             <i class="fa fa-plus"></i>
@@ -212,7 +212,7 @@ def generate_html(year_data: Dict[str, Dict], total_topics: int = 0) -> str:
                     </div>
                 </div>
             ''')
-        
+
         # 生成标签页内容容器（优化动画和布局）
         tab_contents.append(f'''
             <div class="tab-content {active_class} animate-fade-in" data-year="{year_name}">
@@ -222,7 +222,7 @@ def generate_html(year_data: Dict[str, Dict], total_topics: int = 0) -> str:
             </div>
         ''')
     tab_contents_html = "\n".join(tab_contents)
-    
+
     # HTML 模板（优化版本 - 增强视觉效果和用户体验）
     html_template = f'''<!DOCTYPE html>
 <html lang="zh-CN">
@@ -519,7 +519,7 @@ def generate_html(year_data: Dict[str, Dict], total_topics: int = 0) -> str:
     <header class="relative h-screen w-full overflow-hidden">
         <!-- 背景图片层 -->
         <div class="absolute inset-0 z-0">
-            <img src="https://github.com/gevico/gtoc-forum/blob/main/asserts/head.png?raw=true" 
+            <img src="https://github.com/gevico/gtoc-forum/blob/main/asserts/head.png?raw=true"
                  alt="GTOC Forum 背景"
                  class="w-full h-full object-cover scale-105 animate-[zoom_20s_ease-in-out_infinite_alternate]"
                  loading="eager">
@@ -527,14 +527,14 @@ def generate_html(year_data: Dict[str, Dict], total_topics: int = 0) -> str:
             <div class="absolute inset-0 gradient-overlay"></div>
             <div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-dark/30"></div>
         </div>
-        
+
         <!-- 装饰性几何元素 -->
         <div class="absolute inset-0 z-0 opacity-10">
             <div class="absolute top-20 left-10 w-72 h-72 bg-secondary rounded-full mix-blend-multiply filter blur-3xl animate-float"></div>
             <div class="absolute top-40 right-10 w-72 h-72 bg-accent rounded-full mix-blend-multiply filter blur-3xl animate-float" style="animation-delay: 2s;"></div>
             <div class="absolute bottom-20 left-1/3 w-72 h-72 bg-secondary rounded-full mix-blend-multiply filter blur-3xl animate-float" style="animation-delay: 4s;"></div>
         </div>
-        
+
         <!-- 标题区域 - 增强动画效果 -->
         <div class="absolute inset-0 flex items-center justify-center z-10 text-center px-4">
             <div class="max-w-4xl mx-auto animate-fade-in">
@@ -545,16 +545,16 @@ def generate_html(year_data: Dict[str, Dict], total_topics: int = 0) -> str:
                     </h1>
                     <div class="flex items-center justify-center gap-3 mb-4">
                         <div class="h-px w-16 bg-gradient-to-r from-transparent to-secondary"></div>
-                        <span class="text-2xl md:text-3xl font-bold text-secondary">2025</span>
+                        <span class="text-2xl md:text-3xl font-bold text-secondary">2026</span>
                         <div class="h-px w-16 bg-gradient-to-l from-transparent to-secondary"></div>
                     </div>
                 </div>
-                
+
                 <!-- 副标题 -->
                 <p class="text-[clamp(1.1rem,3vw,1.5rem)] text-white/90 text-shadow max-w-2xl mx-auto mb-10 leading-relaxed font-medium">
                     格维开源社区 · 线上技术交流论坛
                 </p>
-                
+
                 <!-- 特色标签 -->
                 <div class="flex flex-wrap justify-center gap-3 mb-8">
                     <span class="px-4 py-2 bg-white/10 backdrop-blur-md rounded-full text-white text-sm font-medium border border-white/20 hover:bg-white/20 transition-all">
@@ -572,10 +572,10 @@ def generate_html(year_data: Dict[str, Dict], total_topics: int = 0) -> str:
                 </div>
             </div>
         </div>
-        
+
         <!-- 向下滚动指示 - 居中布局 -->
         <div class="absolute bottom-12 left-0 right-0 z-10 flex justify-center">
-            <a href="#forum-archive" 
+            <a href="#forum-archive"
                class="text-white text-5xl opacity-70 hover:opacity-100 transition-all animate-bounce hover:scale-110">
                 <i class="fa fa-angle-double-down"></i>
             </a>
@@ -596,7 +596,7 @@ def generate_html(year_data: Dict[str, Dict], total_topics: int = 0) -> str:
                     <div class="h-1 w-24 bg-gradient-to-r from-secondary to-accent rounded-full"></div>
                 </div>
             </div>
-            
+
             <!-- 标签页导航容器 - 优化设计 -->
             <div class="max-w-5xl mx-auto mb-10">
                 <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-2 animate-slide-up" style="animation-delay: 0.1s;">
@@ -617,7 +617,7 @@ def generate_html(year_data: Dict[str, Dict], total_topics: int = 0) -> str:
                     <!-- 装饰性背景 -->
                     <div class="absolute top-0 right-0 w-64 h-64 bg-secondary/5 rounded-full blur-3xl -mr-32 -mt-32"></div>
                     <div class="absolute bottom-0 left-0 w-64 h-64 bg-accent/5 rounded-full blur-3xl -ml-32 -mb-32"></div>
-                    
+
                     <div class="relative z-10">
                         <div class="flex items-start gap-4 mb-4">
                             <div class="flex-shrink-0 w-12 h-12 bg-gradient-to-br from-secondary to-accent rounded-xl flex items-center justify-center text-white text-xl shadow-lg">
@@ -627,8 +627,8 @@ def generate_html(year_data: Dict[str, Dict], total_topics: int = 0) -> str:
                                 <h3 class="text-xl font-bold text-primary mb-2">关于 GTOC Forum</h3>
                                 <p class="text-base text-gray-700 leading-relaxed text-justify">
                                     GTOC Forum 是由社区成员牵头发起的线上技术交流论坛，不定期开展技术分享会。社区成员如果有感兴趣或者想要申报议题，可以通过
-                                    <a href="https://github.com/gevico/gtoc-forum/issues" 
-                                       target="_blank" 
+                                    <a href="https://github.com/gevico/gtoc-forum/issues"
+                                       target="_blank"
                                        rel="noopener noreferrer"
                                        class="inline-flex items-center gap-1 text-secondary hover:text-primary font-semibold transition-all hover:gap-2">
                                         <i class="fa fa-github"></i>
@@ -639,7 +639,7 @@ def generate_html(year_data: Dict[str, Dict], total_topics: int = 0) -> str:
                                 </p>
                             </div>
                         </div>
-                        
+
                         <!-- 统计信息 -->
                         <div class="grid grid-cols-3 gap-4 mt-6 pt-6 border-t border-gray-200">
                             <div class="text-center">
@@ -667,36 +667,36 @@ def generate_html(year_data: Dict[str, Dict], total_topics: int = 0) -> str:
             <div class="absolute top-0 left-0 w-96 h-96 bg-secondary rounded-full mix-blend-multiply filter blur-3xl"></div>
             <div class="absolute bottom-0 right-0 w-96 h-96 bg-accent rounded-full mix-blend-multiply filter blur-3xl"></div>
         </div>
-        
+
         <div class="container mx-auto px-4 relative z-10">
             <div class="max-w-5xl mx-auto">
                 <!-- 社交链接 -->
                 <div class="mb-10">
                     <h3 class="text-center text-lg font-semibold text-white/80 mb-6 tracking-wide">关注我们</h3>
                     <div class="flex flex-wrap justify-center gap-4">
-                        <a href="https://github.com/gevico" 
-                           target="_blank" 
+                        <a href="https://github.com/gevico"
+                           target="_blank"
                            rel="noopener noreferrer"
                            class="group flex items-center gap-3 px-6 py-3 bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-lg border border-white/20">
                             <i class="fa fa-github text-2xl group-hover:scale-110 transition-transform"></i>
                             <span class="font-medium">Github</span>
                         </a>
-                        <a href="https://space.bilibili.com/483048140/lists/6433029?type=season" 
+                        <a href="https://space.bilibili.com/483048140/lists/6433029?type=season"
                            target="_blank"
-                           rel="noopener noreferrer" 
+                           rel="noopener noreferrer"
                            class="group flex items-center gap-3 px-6 py-3 bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-lg border border-white/20">
                             <i class="fa fa-youtube-play text-2xl group-hover:scale-110 transition-transform"></i>
                             <span class="font-medium">Bilibili</span>
                         </a>
-                        <a href="https://qm.qq.com/q/jIXYyZkQqQ" 
-                           target="_blank" 
+                        <a href="https://qm.qq.com/q/jIXYyZkQqQ"
+                           target="_blank"
                            rel="noopener noreferrer"
                            class="group flex items-center gap-3 px-6 py-3 bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-lg border border-white/20">
                             <i class="fa fa-qq text-2xl group-hover:scale-110 transition-transform"></i>
                             <span class="font-medium">QQ Group</span>
                         </a>
-                        <a href="https://t.me/gevico_channel" 
-                           target="_blank" 
+                        <a href="https://t.me/gevico_channel"
+                           target="_blank"
                            rel="noopener noreferrer"
                            class="group flex items-center gap-3 px-6 py-3 bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-lg border border-white/20">
                             <i class="fa fa-telegram text-2xl group-hover:scale-110 transition-transform"></i>
@@ -704,12 +704,12 @@ def generate_html(year_data: Dict[str, Dict], total_topics: int = 0) -> str:
                         </a>
                     </div>
                 </div>
-                
+
                 <!-- 分隔线 -->
                 <div class="mb-8">
                     <div class="h-px bg-gradient-to-r from-transparent via-white/30 to-transparent"></div>
                 </div>
-                
+
                 <!-- 版权信息 -->
                 <div class="text-center">
                     <p class="text-white/70 text-sm mb-2 flex items-center justify-center gap-2">
@@ -729,15 +729,15 @@ def generate_html(year_data: Dict[str, Dict], total_topics: int = 0) -> str:
         // 标签页切换功能（增强动画）
         const tabBtns = document.querySelectorAll('.tab-btn');
         const tabContents = document.querySelectorAll('.tab-content');
-        
+
         tabBtns.forEach(btn => {{
             btn.addEventListener('click', () => {{
                 const targetYear = btn.getAttribute('data-year');
-                
+
                 // 切换标签激活状态
                 tabBtns.forEach(b => b.classList.remove('tab-active'));
                 btn.classList.add('tab-active');
-                
+
                 // 切换内容显示（添加淡入动画）
                 tabContents.forEach(content => {{
                     if (content.getAttribute('data-year') === targetYear) {{
@@ -753,7 +753,7 @@ def generate_html(year_data: Dict[str, Dict], total_topics: int = 0) -> str:
                 }});
             }});
         }});
-        
+
         // 平滑滚动
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {{
             anchor.addEventListener('click', function (e) {{
@@ -768,13 +768,13 @@ def generate_html(year_data: Dict[str, Dict], total_topics: int = 0) -> str:
                 }}
             }});
         }});
-        
+
         // 滚动动画效果
         const observerOptions = {{
             threshold: 0.1,
             rootMargin: '0px 0px -100px 0px'
         }};
-        
+
         const observer = new IntersectionObserver((entries) => {{
             entries.forEach(entry => {{
                 if (entry.isIntersecting) {{
@@ -783,7 +783,7 @@ def generate_html(year_data: Dict[str, Dict], total_topics: int = 0) -> str:
                 }}
             }});
         }}, observerOptions);
-        
+
         // 监听所有卡片元素
         document.addEventListener('DOMContentLoaded', () => {{
             const cards = document.querySelectorAll('.card-hover');
@@ -794,7 +794,7 @@ def generate_html(year_data: Dict[str, Dict], total_topics: int = 0) -> str:
                 observer.observe(card);
             }});
         }});
-        
+
         // 确保页面加载完成后页脚可见
         window.addEventListener('load', function() {{
             const footer = document.querySelector('footer');
@@ -804,16 +804,16 @@ def generate_html(year_data: Dict[str, Dict], total_topics: int = 0) -> str:
                 footer.offsetHeight;
             }}
         }});
-        
+
         // 添加滚动进度指示器
         window.addEventListener('scroll', () => {{
             const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
             const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
             const scrolled = (winScroll / height) * 100;
-            
+
             // 可以在这里添加滚动进度条（如果需要）
         }});
-        
+
         // 添加 CSS 动画类
         const style = document.createElement('style');
         style.textContent = `
@@ -833,17 +833,17 @@ def main():
     if not os.path.exists(INPUT_DIR):
         print(f"错误：输入目录 {INPUT_DIR} 不存在，请创建后重试")
         return
-    
+
     # 2. 获取所有年份文件夹（完整路径）
     year_folders = get_year_folders(INPUT_DIR)
     if not year_folders:
         print(f"警告：输入目录 {INPUT_DIR} 下未找到任何数字命名的年份文件夹（如 2025）")
         return
-    
+
     # 3. 解析每个年份的 index.md 和子文件夹
     year_data = {}  # 存储每个年份的所有信息
     total_topics = 0  # 统计所有议题总数
-    
+
     for year_folder in year_folders:
         year_name = os.path.basename(year_folder)
         year_data[year_folder] = {
@@ -851,18 +851,18 @@ def main():
             "subfolder_order": [],# 子文件夹顺序
             "cards": []           # 卡片数据 [(标题, 内容), ...]
         }
-        
+
         # 3.1 解析年份文件夹下的 index.md（获取标签页名称和子文件夹顺序）
         tab_name, subfolder_order = parse_year_index(year_folder)
         year_data[year_folder]["tab_name"] = tab_name
         year_data[year_folder]["subfolder_order"] = subfolder_order
-        
+
         # 3.2 获取年份文件夹下的所有有效子文件夹（非隐藏）
         all_subfolders = []
         for item in os.scandir(year_folder):
             if item.is_dir() and not item.name.startswith('.'):
                 all_subfolders.append(item.name)  # 存储子文件夹名称
-        
+
         # 3.3 按解析的顺序排列子文件夹（不存在的子文件夹跳过，剩余的按原顺序补充）
         ordered_subfolders = []
         # 先添加 index.md 中指定的子文件夹（存在的才添加）
@@ -874,30 +874,30 @@ def main():
                 print(f"警告：年份 {year_name} 的 index.md 中指定的子文件夹 '{sf}' 不存在，跳过")
         # 剩余的子文件夹按名称排序补充到后面
         ordered_subfolders += sorted(all_subfolders)
-        
+
         # 3.4 解析每个有序子文件夹下的 index.md
         for sf_name in ordered_subfolders:
             sf_path = os.path.join(year_folder, sf_name)
             index_md_path = os.path.join(sf_path, "index.md")
-            
+
             # 检查子文件夹下是否有 index.md
             if not os.path.exists(index_md_path):
                 print(f"警告：子文件夹 {year_name}/{sf_name} 下未找到 index.md，跳过")
                 continue
-            
+
             # 解析子文件夹的 index.md
             try:
                 card_title, card_content = parse_md_file(index_md_path)
                 year_data[year_folder]["cards"].append((card_title, card_content))
-                
+
                 # 统计该文件中的议题数量
                 topic_count = count_topics_in_md(index_md_path)
                 total_topics += topic_count
-                
+
                 print(f"成功解析：{year_name}/{sf_name}/index.md → 卡片标题：{card_title}，议题数：{topic_count}")
             except Exception as e:
                 print(f"警告：解析 {year_name}/{sf_name}/index.md 失败 - {str(e)}，跳过")
-    
+
     # 4. 生成 HTML 并保存
     try:
         html_content = generate_html(year_data, total_topics)
